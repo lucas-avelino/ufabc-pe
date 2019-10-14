@@ -8,18 +8,16 @@ void main(){
     char resultado[8] = {0};
     
     aplicaPeca(tabuleiro, 0, resultado);
-
-    for (int i = 0; i < 8; i++)
-    {
-        printf("%d%s", resultado[i], i!=7?" ":"");
-    }
-    printf("\n");
-    
 }
 
 int aplicaPeca(int tabuleiro[8][8], char linha, char resultado[8]){
     if(linha == 8){
-        return 1;
+        for (int i = 0; i < 8; i++)
+        {
+            printf("%d%s", resultado[i], i!=7?" ":"");
+        }
+        printf("\n");
+        return 0;
     }else{
         for(int i = 0; i < 8; i++){
             // printf("%d %d\n", linha, i);
