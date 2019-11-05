@@ -1,0 +1,48 @@
+#!/bin/bash
+#########################
+# COMPILAR
+#########################
+if [ -f *.c ]; then
+    FILE=""
+    for file in *.c
+    do
+	base="${file%%.*}"
+	gcc -c $file '-I'"$PWD/src" -o obj/$base.o 
+	FILE=obj/$base.o
+	break;
+    done
+    for i in {01..14}
+    do
+	gcc -c src/main$i.c '-I'"$PWD/src" -o obj/main$i.o 
+	gcc obj/main$i.o "$FILE" -o bin/p$i -lm
+    done
+else
+    echo "Nenhum arquivo contendo o código fonte foi encontrado no diretório $PWD"
+    exit
+fi
+
+#########################
+# EXECUTAR TESTES
+#########################
+    COUNTER=0
+    GRADE=0
+    rm -rf ./test 2> /dev/null
+    mkdir test
+
+    for i in {01..14}
+    do
+	let COUNTER=COUNTER+1
+        touch ./test/$f
+	./src/gen-points.py | bin/p$i > ./test/file$i 
+        DIFF=$(diff -w ./test/file$i ./out/file$i) 
+        if [ "$DIFF" == "" ]; then
+            let GRADE=GRADE+1
+	    echo "$COUNTER ok"
+        else 
+            echo "$COUNTER incorreto ($f)"
+        fi
+    done
+
+    # rm -rf ./test
+
+    echo "Nota $GRADE de 10."

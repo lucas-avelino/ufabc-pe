@@ -1,0 +1,67 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{minted}
+\usepackage{color}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+\begin{center}
+  {\LARGE Problemas de geometria}
+\end{center}
+\bigskip 
+
+Implemente as funções declaradas no arquivo \texttt{geometria.h} (veja a listagem do código desse arquivo abaixo).
+
+\inputminted{C}{geometria.h}
+
+\section* {Observações}
+
+\textcolor{red}{\textbf{Atenção:} Siga as instruções no arquivo
+README para compilação. Em particular, seu código deverá incluir
+\texttt{geometria.h} via a linha
+\begin{verbatim}
+#include "geometria.h"
+\end{verbatim}
+no início do programa. É proibido modificar o conteúdo desse arquivo de cabeçalhos. 
+
+As funções foram declaradas numa certa ordem. A ordem foi pensada de
+modo que, na hora de implementar uma função é bem provável que você
+precise chamar alguma função que foi declarada antes dela (exceto
+pelas primeiras que são muito simples).
+
+\subsection* {Geometria analítica}
+Se você não se lembra de alguma definição, pode pesquisar no Google,
+ou no livro que você usou para o curso de geometria analítica.
+Algumas lembranças sobre conceitos de geometria analítica serão dadas
+em sala, durante a aula prática. Algumas funções da lista só podem ser
+implementadas de um jeito, outras têm soluções variadas, vai depender
+da modelagem matemática que você adotar para resolver cada problema
+geométrico associado.
+
+% Se você não se lembra de geometria analítica, aqui vão algumas dicas.
+% \begin{itemize}
+% \item As definições que você esqueceu você pode consultar no Google.
+% \item O cosseno do ângulo $\Theta$ entre dois vetores pode ser
+%   calculado através da lei dos cossenos
+%   \[
+%   c^2 = a^2 + b^2 - 2ab\,\mathrm{cos}(\Theta)
+%   \]
+% onde c é o comprimento lado oposto ao ângulo $\Theta$ no triângulo formado pelos dois vetores, e $a$ e $b$ são os comprimentos dos vetores. Mas primeiro expanda e depois simplifique a expressão que você encontrar para o cose-no, pois o que queremos saber do cose-no é só o sinal! A expressão final depois de simplificada fica \emph{bem} simples!
+% \item Nas funções \texttt{cruza} e \texttt{dentro}, você deve usar apenas algumas chamadas à função \texttt{sentido} e uns poucos operadores lógicos.
+% \item Para a função \texttt{projeta}, lembre-se de que, se projetamos um vetor $u$ sobre um vetor $v$, o vetor resultante é um vetor múltiplo de $v$, digamos $\alpha v$. Portanto, a dica é: você deve encontrar $\alpha$ que minimiza
+%   \[
+%   f(\alpha) = \norm{u - \alpha v}.
+%   \]
+%   Outra dica é que, para minimizar a raiz quadrada de algo que é sempre não negativo, basta minimizar esse algo!
+ 
+% \end{itemize}
+
+\end{document}
