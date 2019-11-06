@@ -2,6 +2,7 @@
 
 #include "geometria.h"
 #include <math.h>
+
 //  01. Calcula o produto interno <u,v>
 double produto_interno(vetor u, vetor v){
     return u.x * v.x + u.y * v.y;
@@ -44,25 +45,82 @@ int sentido(ponto p, ponto q, ponto r){
     return sentido>0? 1: -1;
 }
 
+int pertenceSegmento(ponto p, ponto q, ponto r){
+    if (
+        q.x <= fmax(p.x, r.x) && q.x >= fmin(p.x, r.x) 
+        && q.y <= fmax(p.y, r.y) && q.y >= fmin(p.y, r.y)) 
+       return 1; 
+  
+    return 0; 
+}
 /*  07. Retorna 1 se os interiores dos segmentos se intersectam em
     um único ponto e retorna 0 caso contrário. */
 int cruza(segmento s, segmento t){
-    // (s.x * t.y)
-    // return ( s.)
-    //     : 1
-    //     ? 0
+    int o1 = sentido(s.p, s.q, t.p); 
+    int o2 = sentido(s.p, s.q, t.q); 
+    int o3 = sentido(t.p, t.q, s.p); 
+    int o4 = sentido(t.p, t.q, s.q); 
+    // printf("s: ((%f,%f),(%f,%f))\t", s.p.x, s.p.y, s.q.x, s.q.y);
+    // printf("t: ((%f,%f),(%f,%f))\t", t.p.x, t.p.y, t.q.x, t.q.y);
+    // printf("o1: %d\t o2: %d\t o3: %d\t o4: %d -> ", o1, o2, o3, o4);
+
+    if(
+        (s.p.x == t.p.x && s.p.y == t.p.y) || (s.p.x == t.q.x && s.p.y == t.q.y ) 
+        || (s.q.x == t.p.x && s.q.y == t.p.y) || (s.q.x == t.q.x && s.q.y == t.q.y)
+    ){
+        return 0;
+    }
+
+    if (o1 != o2 && o3 != o4 && (o1 != 0 && o2 != 0 && o3 != 0 && o4 != 0)){
+        return 1;
+    }
+  
+    return 0;
+}
+
+float areaTriangulo(triangulo t){
+    float area = (t.p.x*(t.q.y-t.r.y) + t.q.x*(t.r.y-t.p.y)+ t.r.x*(t.p.y-t.q.y))/2.0;
+    if( area<0 ) return area*-1;
+    return area;
 }
 
 /*  08. Retorna 1 se o ponto p está no interior do triângulo t
     e retorna 0 caso contrário. */
-int dentro(ponto p, triangulo t){}
+int dentro(ponto p, triangulo t){
+    // x1 -> t.p.x
+    // y1 -> t.p.y
+    // x2 -> t.q.x
+    // y2 -> t.q.y
+    // x3 -> t.r.x
+    // y3 -> t.r.y
+    if(
+        (sentido(p, t.q, t.r) == 0 && pertenceSegmento(t.q, p, t.r))
+        || (sentido(t.p, p, t.r) == 0 && pertenceSegmento(t.p, p, t.r))
+        || (sentido(t.p, t.q, p) == 0 && pertenceSegmento(t.p, p, t.q))
+    ){
+        return 1;
+    }
+
+
+    float area =  areaTriangulo(t);
+
+
+    float A1 = areaTriangulo((triangulo){p, t.q, t.r});
+    float A2 = areaTriangulo((triangulo){t.p, p, t.r});
+    float A3 = areaTriangulo((triangulo){t.p, t.q, p});
+    
+    // printf("A:%.14f\t A1:%.14f\t A2:%.14f\t A3:%.14f\t",area, A1, A2, A3);
+    return area == (A1+A2+A3);
+}
 
 /*  09. Devolve 1 se um retângulo é vazio e 0 caso contrário. */
 /*  Um retângulo é vazio se a extremidade inferior esquerda 
     (ponto ie da struct) se encontra estritamente a direita 
     ou estritamente acima da extremidade superior direita 
     (ponto sd da struct). */
-int retangulo_vazio(retangulo r){}
+int retangulo_vazio(retangulo r){
+    return (r.ie.x == r.sd.x) || (r.ie.y == r.sd.y);
+}
 
 /*  10. Devolve o retângulo resultante da intersecção de 
     dois retângulos fechados passados como argumento. 
