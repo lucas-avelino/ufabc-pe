@@ -39,29 +39,9 @@ int sinal_do_coseno(vetor u, vetor v){
     anti-horário. Se os pontos forem colineares devolva 0. 
     Se dois desses pontos são iguais, devolve 0. */
 int sentido(ponto p, ponto q, ponto r){
-    printf("P: (%f,%f) Q: (%f,%f) R: (%f,%f)\n", p.x, p.y, q.x, q.y, r.x, r.y);
-    printf("sinal: %f -> \n", subtrai(p,r).y);
-    // if(subtrai(p,r) > 0 && subtrai(q,r) > 0){
-
-    // }
-
-
-
-
-    int ret = 1;
-    int yParaR = (-(r.x * (p.y -  q.y) + (p.y * q.x) + (p.x * q.x)))/( q.x - p.x);
-    // int yParaQ = (-(q.x * (p.y -  r.y) + (p.y * r.x) + (p.x * r.x)))/( r.x - p.x);
-    if(p.x > q.x){
-        ret*= -1;
-    }
-    if(q.y < r.y){
-        ret*= -1;
-    }
-    if( r.y == yParaR ){
-        ret= 0;
-    }
-
-    return ret;
+    double sentido = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y); 
+    if (sentido == 0) return sentido;
+    return sentido>0? 1: -1;
 }
 
 /*  07. Retorna 1 se os interiores dos segmentos se intersectam em
