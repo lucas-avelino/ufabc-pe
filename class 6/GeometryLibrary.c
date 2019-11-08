@@ -123,7 +123,28 @@ ponto cruzamento(segmento s, segmento t){}
 /* 12. Calcula o ponto que é a projeção ortogonal de p na reta que 
    contém o segmento s. Ou seja, devolve o ponto da reta que 
    contém s que é o mais próximo de p. */
-ponto projeta(ponto p, segmento s){}
+ponto projeta(ponto p, segmento s){
+    double dx = s.q.x - s.p.x;
+    double dy = s.q.y -  s.p.y;
+    double mag = sqrt(dx*dx + dy*dy);
+    dx /= mag;
+    dy /= mag;
+
+    double lambda = (dx * (p.x - s.p.x)) + (dy * (p.y - s.p.y));
+    double x,y;
+
+    x = ((dx * lambda) + s.p.x);
+    y = ((dy * lambda) + s.p.y);
+    // printf("%.20lf %d ->\t", y, ());
+    return (ponto) {
+            // 0 == round(x)
+            //     ?(double) 0.00000
+                ((dx * lambda) + s.p.x),
+            y < 0.0000000 && y > -0.000009
+                ?(double) 0.000000
+                :((dy * lambda) + s.p.y)
+        };
+}
 
 /* 13. Devolve 1 se o triângulo é degenerado, isto é
    se seus três vértices são colineares e 0 caso contrário. */
@@ -131,6 +152,31 @@ int degenerado(triangulo t){
     return !sentido(t.p, t.q, t.r);
 }
 
+int is_equal(ponto a, ponto b){
+    return a.x == b.x && b.y == a.y;
+}
 /* 14. Devolve 1 se o interior dos triângulos a e b se 
    intersectam e devolve 0 caso contrário. */
-int intersecta_tri(triangulo a, triangulo b){}
+int intersecta_tri(triangulo a, triangulo b){
+    // printf("((%f,%f),(%f,%f),(%f,%f)), ((%f,%f),(%f,%f),(%f,%f))", a.p.x, a.p.y, a.q.x, a.q.y, a.r.x, a.r.y, b.p.x, b.p.y, b.q.x, b.q.y, b.r.x, b.r.y);
+    return !degenerado(a) && !degenerado(b)  &&
+        cruza((segmento) {a.p,a.q}, (segmento) {b.p,b.q})
+        || cruza((segmento) {a.q,a.r}, (segmento) {b.p,b.q})
+        || cruza((segmento) {a.r,a.p}, (segmento) {b.p,b.q})
+        
+        || cruza((segmento) {a.p,a.q}, (segmento) {b.q,b.r})
+        || cruza((segmento) {a.q,a.r}, (segmento) {b.q,b.r})
+        || cruza((segmento) {a.r,a.p}, (segmento) {b.q,b.r})
+
+        || cruza((segmento) {a.p,a.q}, (segmento) {b.p,b.r})
+        || cruza((segmento) {a.q,a.r}, (segmento) {b.p,b.r})
+        || cruza((segmento) {a.r,a.p}, (segmento) {b.p,b.r})
+
+        || !is_equal(a.p, b.q) && !is_equal(a.p, b.p) && !is_equal(a.p, b.r) && dentro(a.p, b)
+        || !is_equal(a.q, b.q) && !is_equal(a.q, b.p) && !is_equal(a.q, b.r) && dentro(a.q, b)
+        || !is_equal(a.r, b.q) && !is_equal(a.r, b.p) && !is_equal(a.r, b.r) && dentro(a.r, b)
+
+        || !is_equal(b.p, a.q) && !is_equal(b.p, a.p) && !is_equal(b.p, a.r) && dentro(b.p, a)
+        || !is_equal(b.q, a.q) && !is_equal(b.q, a.p) && !is_equal(b.q, a.r) && dentro(b.q, a)
+        || !is_equal(b.r, a.q) && !is_equal(b.r, a.p) && !is_equal(b.r, a.r) && dentro(b.r, a);
+}
