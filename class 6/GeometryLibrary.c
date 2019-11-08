@@ -1,4 +1,4 @@
-//gcc -c '-I'"$PWD/src" seu_prog.c
+//gcc -c '-I'"$PWD/src" GeometryLibrary.c
 
 #include "geometria.h"
 #include <math.h>
@@ -87,30 +87,7 @@ float areaTriangulo(triangulo t){
 /*  08. Retorna 1 se o ponto p está no interior do triângulo t
     e retorna 0 caso contrário. */
 int dentro(ponto p, triangulo t){
-    // x1 -> t.p.x
-    // y1 -> t.p.y
-    // x2 -> t.q.x
-    // y2 -> t.q.y
-    // x3 -> t.r.x
-    // y3 -> t.r.y
-    if(
-        (sentido(p, t.q, t.r) == 0 && pertenceSegmento(t.q, p, t.r))
-        || (sentido(t.p, p, t.r) == 0 && pertenceSegmento(t.p, p, t.r))
-        || (sentido(t.p, t.q, p) == 0 && pertenceSegmento(t.p, p, t.q))
-    ){
-        return 1;
-    }
-
-
-    float area =  areaTriangulo(t);
-
-
-    float A1 = areaTriangulo((triangulo){p, t.q, t.r});
-    float A2 = areaTriangulo((triangulo){t.p, p, t.r});
-    float A3 = areaTriangulo((triangulo){t.p, t.q, p});
-    
-    // printf("A:%.14f\t A1:%.14f\t A2:%.14f\t A3:%.14f\t",area, A1, A2, A3);
-    return area == (A1+A2+A3);
+    return sentido(t.p, p, t.r) == sentido(p, t.q, t.r) && sentido(t.p, p, t.r) == sentido(t.p, t.q, p);
 }
 
 /*  09. Devolve 1 se um retângulo é vazio e 0 caso contrário. */
@@ -119,14 +96,16 @@ int dentro(ponto p, triangulo t){
     ou estritamente acima da extremidade superior direita 
     (ponto sd da struct). */
 int retangulo_vazio(retangulo r){
-    return (r.ie.x == r.sd.x) || (r.ie.y == r.sd.y);
+    return (r.ie.x > r.sd.x) || (r.ie.y > r.sd.y);
 }
 
 /*  10. Devolve o retângulo resultante da intersecção de 
     dois retângulos fechados passados como argumento. 
     Se a intersecção é vazia, qualquer representação 
     de retângulo vazio serve como resposta da funçao! */
-retangulo intersecta_ret(retangulo a, retangulo b){}
+retangulo intersecta_ret(retangulo a, retangulo b){
+
+}
 
 // ##############################################################
 // OPCIONAL OPCIONAL OPCIONAL OPCIONAL OPCIONAL OPCIONAL OPCIONAL
@@ -148,7 +127,9 @@ ponto projeta(ponto p, segmento s){}
 
 /* 13. Devolve 1 se o triângulo é degenerado, isto é
    se seus três vértices são colineares e 0 caso contrário. */
-int degenerado(triangulo t){}
+int degenerado(triangulo t){
+    return !sentido(t.p, t.q, t.r);
+}
 
 /* 14. Devolve 1 se o interior dos triângulos a e b se 
    intersectam e devolve 0 caso contrário. */
