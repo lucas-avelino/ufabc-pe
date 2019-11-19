@@ -90,7 +90,7 @@ int main()
             }
             else
             {
-                printf("%d\n", ultimoDado->dado);
+                // printf("%d\n", ultimoDado->dado);
                 ultimoDado->prox = novoDado;
             }
         }
@@ -100,7 +100,7 @@ int main()
             // campo dado (seu item) na saída padrão e
             // exclui o nó removido
             // imprime "IMPOSSIBLE\n" se a lista estiver vazia
-            no* toRemove = lista;
+            no *toRemove = lista;
             if (lista == NULL)
             {
                 printf("IMPOSSIBLE\n");
@@ -119,17 +119,32 @@ int main()
             // exclui o nó removido
             // imprime "IMPOSSIBLE\n" se a lista estiver vazia
 
-            no* toRemove = final(lista);
+            // no* toRemove = final(lista);
 
-            if (lista == NULL)
+            no *cabeca = lista;
+            if (cabeca == NULL)
             {
                 printf("IMPOSSIBLE\n");
             }
+            else if (cabeca->prox == NULL)
+            {
+                lista = cabeca->prox;
+                printf("%d\n", cabeca->dado);
+                exclui(cabeca);
+            }
             else
             {
-                printf("%d\n", toRemove->dado);
-                exclui(toRemove);
+                while (cabeca->prox->prox != NULL)
+                {
+                    cabeca = cabeca->prox;
+                }
+                // cabeca = cabeca->prox;
+                printf("%d\n", cabeca->prox->dado);
+                exclui(cabeca->prox);
+                cabeca->prox = NULL;
             }
+
+            
         }
         else if (strcmp(operacao, "print") == 0)
         {
@@ -148,16 +163,28 @@ int main()
             // sempre imprimir o '\n' no final
             item dado;
             scanf("%d\n", &dado);
-
-            
-
-            // ... seu código aqui.
+            int index = 0;
+            no* item = lista;
+            while (item->dado != dado)
+            {
+                item = item->prox;
+                if(item->prox == NULL){
+                    index = -1;
+                    break;
+                }
+                index++;
+            }
+            printf("%d\n", index);
         }
         else if (strcmp(operacao, "clear") == 0)
         {
             // exclui todos os nós da lista, deixando-a vazia
-
-            // ... seu código aqui.
+            while (lista != NULL)
+            {
+                no *toRemove = lista;
+                lista = lista->prox;
+                exclui(toRemove);
+            }
         }
         else
         {
