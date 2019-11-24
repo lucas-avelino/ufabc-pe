@@ -88,38 +88,26 @@ int main() {
       no* lista1 = le_lista();
       no* lista2 = le_lista();
       no* temp = NULL;
-      no* temp2 = lista1;
+      no* cabecario = lista1;
 
-      temp = lista2;
-
-
-      for (int i = 0; lista1 != NULL && lista2 != NULL; i++)
+      if (lista1 == NULL)
       {
-         if(i%2 == 1){
-            lista2->prox = temp;
-            lista1 = lista1->prox;
+         imprime_lista(lista2);
+      }
+      else if(lista2 == NULL)
+      {
+         imprime_lista(lista1);
+      }
+      else
+      {
+         while(lista1 !=NULL && lista2 !=NULL){
             temp = lista1->prox;
-         }else{
-            
+            lista1->prox = lista2;
+            lista1 = lista2;
+            lista2 = temp;
          }
+         imprime_lista(cabecario);
       }
-      
-
-
-      while ()
-      {
-         if(){
-
-         }
-         temp = lista1->prox;
-         lista1->prox = lista2;
-         lista1 = lista1->prox;
-      }
-
-         //temp = lista2->prox;
-         //lista2->prox = lista1;
-
-      imprime_lista(temp2);
     } else if (strcmp(operacao, "unzip") == 0) {
       /* 
 
