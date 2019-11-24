@@ -22,46 +22,49 @@
 #include "item.h"
 #include "lista.h"
 
-
 // Lê uma lista ligada da entrada padrão e devolve um ponteiro para
 // seu primeiro nó.
 // Use esta função (talvez mais de uma vez) em cada exercício abaixo
 // que pedir para ler lista ligada.
-no *le_lista() {
-  int n;
+no *le_lista()
+{
+	int n;
 
-  // Lê da entrada padrão um número n.
-  scanf("%d", &n);
+	// Lê da entrada padrão um número n.
+	scanf("%d", &n);
 
-  if (!n)
-    return NULL;
-  
-  // Aloca espaço para um vetor com n registros do tipo "no".
-  no *lista = (no *) malloc(n * sizeof(no));
+	if (!n)
+		return NULL;
 
-  // Lê da entrada padrão n números inteiros, armazenando-os
-  // nos nós alocados no vetor "lista", ao mesmo tempo que ajusta
-  // os ponteiros "prox" de cada nó para apontar para o nó seguinte.
-  for (int i = 0; i < n; i ++) {
-    scanf("%d", &lista[i].dado);
-    lista[i].prox = lista + (i + 1);
-  }
+	// Aloca espaço para um vetor com n registros do tipo "no".
+	no *lista = (no *)malloc(n * sizeof(no));
 
-  // Último nó deve ter o campo "prox" apontando para NULL para marcar
-  // o fim da lista ligada.
-  lista[n - 1].prox = NULL;
+	// Lê da entrada padrão n números inteiros, armazenando-os
+	// nos nós alocados no vetor "lista", ao mesmo tempo que ajusta
+	// os ponteiros "prox" de cada nó para apontar para o nó seguinte.
+	for (int i = 0; i < n; i++)
+	{
+		scanf("%d", &lista[i].dado);
+		lista[i].prox = lista + (i + 1);
+	}
 
-  // Afinal "lista" é um vetor ou é uma lista-ligada?
-  return lista;
+	// Último nó deve ter o campo "prox" apontando para NULL para marcar
+	// o fim da lista ligada.
+	lista[n - 1].prox = NULL;
+
+	// Afinal "lista" é um vetor ou é uma lista-ligada?
+	return lista;
 }
 
+int main()
+{
+	char operacao[20];
 
-int main() {
-  char operacao[20];
-  
-  while (scanf("%s", operacao) == 1) {
-    if (strcmp(operacao, "zip") == 0) {
-      /*
+	while (scanf("%s", operacao) == 1)
+	{
+		if (strcmp(operacao, "zip") == 0)
+		{
+			/*
 
       EXERCÌCIO 1
 
@@ -84,32 +87,35 @@ int main() {
       6. use apenas a função imprime_lista() do arquivo lista.c
 
       */
-     
-      no* lista1 = le_lista();
-      no* lista2 = le_lista();
-      no* temp = NULL;
-      no* cabecario = lista1;
 
-      if (lista1 == NULL)
-      {
-         imprime_lista(lista2);
-      }
-      else if(lista2 == NULL)
-      {
-         imprime_lista(lista1);
-      }
-      else
-      {
-         while(lista1 !=NULL && lista2 !=NULL){
-            temp = lista1->prox;
-            lista1->prox = lista2;
-            lista1 = lista2;
-            lista2 = temp;
-         }
-         imprime_lista(cabecario);
-      }
-    } else if (strcmp(operacao, "unzip") == 0) {
-      /* 
+			no *lista1 = le_lista();
+			no *lista2 = le_lista();
+			no *temp = NULL;
+			no *cabecario = lista1;
+
+			if (lista1 == NULL)
+			{
+				imprime_lista(lista2);
+			}
+			else if (lista2 == NULL)
+			{
+				imprime_lista(lista1);
+			}
+			else
+			{
+				while (lista1 != NULL && lista2 != NULL)
+				{
+					temp = lista1->prox;
+					lista1->prox = lista2;
+					lista1 = lista2;
+					lista2 = temp;
+				}
+				imprime_lista(cabecario);
+			}
+		}
+		else if (strcmp(operacao, "unzip") == 0)
+		{
+			/* 
 
       EXERCÍCIO 2
 
@@ -129,13 +135,33 @@ int main() {
       7. use apenas a função imprime_lista() do arquivo lista.c
 
       */
-      
 
-      // seu código aqui ...
-      
+			no *c = le_lista();
+			if (c == NULL || c->prox == NULL)
+			{
+				imprime_lista(c);
+			}
+			else
+			{
+				no *a = c;
+				no *b = c->prox;
+				no *temp = NULL;
+				while (c != NULL && c->prox != NULL && c->prox != NULL)
+				{
+					temp = c->prox;
+					c->prox = temp->prox;
+					c = temp;
+				}
+				imprime_lista(a);
+				imprime_lista(b);
 
-    } else if (strcmp(operacao, "reverse") == 0) {
-      /* 
+				// limpa_lista(a);
+				// limpa_lista(b);
+			}
+		}
+		else if (strcmp(operacao, "reverse") == 0)
+		{
+			/* 
 
       EXERCÍCIO 3
 
@@ -154,12 +180,11 @@ int main() {
 
       */
 
-
-      // seu código aqui ...
-      
-      
-    } else if (strcmp(operacao, "reverse_rec") == 0) {
-      /* 
+			// seu código aqui ...
+		}
+		else if (strcmp(operacao, "reverse_rec") == 0)
+		{
+			/* 
 
       EXERCÍCIO 4
 
@@ -170,12 +195,11 @@ int main() {
 
       */
 
-
-      // seu código aqui ...
-      
-
-    } else if (strcmp(operacao, "sorted_merge") == 0) {
-      /* 
+			// seu código aqui ...
+		}
+		else if (strcmp(operacao, "sorted_merge") == 0)
+		{
+			/* 
 
       EXERCÍCIO 5
 
@@ -198,12 +222,11 @@ int main() {
 
       */
 
-
-      // seu código aqui ...
-      
-      
-    } else if (strcmp(operacao, "sorted_intersect") == 0) {
-      /* 
+			// seu código aqui ...
+		}
+		else if (strcmp(operacao, "sorted_intersect") == 0)
+		{
+			/* 
 
       EXERCÍCIO 6
 
@@ -227,12 +250,11 @@ int main() {
 
       */
 
-
-      // seu código aqui ...
-      
-      
-    } else if (strcmp(operacao, "split_in_half") == 0) {
-      /* 
+			// seu código aqui ...
+		}
+		else if (strcmp(operacao, "split_in_half") == 0)
+		{
+			/* 
 
       EXERCÍCIO 7
 
@@ -254,15 +276,14 @@ int main() {
 
       */
 
+			// seu código aqui ...
+		}
+		else
+		{
+			// Nesse caso a operação lida não é válida
+			printf("INVALID OPERATION\n");
+		}
+	}
 
-      // seu código aqui ...
-      
-      
-    } else {
-      // Nesse caso a operação lida não é válida
-      printf("INVALID OPERATION\n");
-    }
-  }
-
-  return 0;
+	return 0;
 }
