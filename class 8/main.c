@@ -111,6 +111,8 @@ int main()
 					lista2 = temp;
 				}
 				imprime_lista(cabecario);
+				exclui(cabecario->prox);
+				exclui(cabecario);
 			}
 		}
 		else if (strcmp(operacao, "unzip") == 0)
@@ -154,7 +156,7 @@ int main()
 				}
 				imprime_lista(a);
 				imprime_lista(b);
-
+				exclui(a);
 				// limpa_lista(a);
 				// limpa_lista(b);
 			}
@@ -179,8 +181,10 @@ int main()
       6. use apenas as funções imprime_lista() e inverte() do arquivo lista.c
 
       */
-
-			// seu código aqui ...
+	 		no* lista = le_lista();
+			inverte(&lista);
+			imprime_lista(lista);
+			exclui(final(lista));
 		}
 		else if (strcmp(operacao, "reverse_rec") == 0)
 		{
@@ -195,7 +199,6 @@ int main()
 
       */
 
-			// seu código aqui ...
 		}
 		else if (strcmp(operacao, "sorted_merge") == 0)
 		{

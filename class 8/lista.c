@@ -18,7 +18,7 @@ no *cria(item dado)
 // Libera memória para o registro apontado pelo parâmetro "x".
 void exclui(no *x)
 {
-    free(x->prox);
+    free(x);
 }
 
 // imprime lista ligada encabeçada pelo nó apontado pelo parâmetro "cabeca".
@@ -28,6 +28,7 @@ void imprime_lista(no *cabeca)
 
     while (tmp != NULL)
     {
+        // printf("[%lx]:",tmp);
         imprime(tmp->dado);
         tmp = tmp->prox;
     }
@@ -55,9 +56,15 @@ no *busca_rec(no *cabeca, item dado)
 // nulo caso a lista esteja vazia.
 no * final(no *cabeca)
 {
-
-    // ... seu código aqui.
+    if(cabeca == NULL){
+        return cabeca;
+    }
+    while(cabeca->prox != NULL){
+        cabeca = cabeca->prox;
+    }
+    return cabeca;
 }
+
 
 // Faz uma cópia (deep copy) da lista encabeçada pelo nó apontado
 // pelo parâmetro "cabeca".
@@ -141,8 +148,23 @@ void remove_todos_rec(no **p_cabeca, item dado)
 // nós que a lista dada, exceto que estes, agora, estão na ordem reversa.
 void inverte(no **p_cabeca)
 {
+    no* antigoUltimo = final(*p_cabeca);
+    no* antigoIncio = *p_cabeca;
+    if(*p_cabeca == NULL || (*p_cabeca)->prox==NULL){return;}
+    *p_cabeca = antigoUltimo;
+    no* p = antigoIncio;
+    no* m = p->prox;
+    no* t;
 
-    // ... seu código aqui.
+    do{
+        t = m->prox;
+        m->prox = p;
+        p = m;
+        m = t;
+    }
+    while (t != NULL);
+    antigoIncio->prox = NULL;
+    
 }
 
 // Faz o mesmo que a função descrita anteriormente, mas de uma forma
