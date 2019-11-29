@@ -197,8 +197,11 @@ int main()
 	 da lista. Você deve ter implementado essa função de forma recursiva.
       2. use apenas as funções imprime_lista() e inverte_rec() do arquivo lista.c
 
-      */
-
+      */	
+	 		no* lista = le_lista();
+	 		inverte_rec(&lista);
+			imprime_lista(lista);
+			exclui(final(lista));
 		}
 		else if (strcmp(operacao, "sorted_merge") == 0)
 		{
@@ -224,8 +227,12 @@ int main()
          compara() declarada em item.h
 
       */
-
-			// seu código aqui ...
+	 		no* a = le_lista();
+			no* b = le_lista();
+	 		while(b != NULL){
+				b = b->prox;
+			}
+			
 		}
 		else if (strcmp(operacao, "sorted_intersect") == 0)
 		{

@@ -28,7 +28,7 @@ void imprime_lista(no *cabeca)
 
     while (tmp != NULL)
     {
-        // printf("[%lx]:",tmp);
+        // printf("[%lx]:", tmp);
         imprime(tmp->dado);
         tmp = tmp->prox;
     }
@@ -56,15 +56,16 @@ no *busca_rec(no *cabeca, item dado)
 // nulo caso a lista esteja vazia.
 no * final(no *cabeca)
 {
-    if(cabeca == NULL){
+    if (cabeca == NULL)
+    {
         return cabeca;
     }
-    while(cabeca->prox != NULL){
+    while (cabeca->prox != NULL)
+    {
         cabeca = cabeca->prox;
     }
     return cabeca;
 }
-
 
 // Faz uma cópia (deep copy) da lista encabeçada pelo nó apontado
 // pelo parâmetro "cabeca".
@@ -119,8 +120,28 @@ no *remove_inicio(no **p_cabeca)
 // lista estiver vazia.
 no *remove_final(no **p_cabeca)
 {
+    no *lista = *p_cabeca;
+    no *cabeca = lista;
 
-    // ... seu código aqui.
+    if (cabeca == NULL)
+    {
+        return NULL;
+    }
+    else if (cabeca->prox == NULL)
+    {
+        lista = cabeca->prox;
+        return cabeca;
+    }
+    else
+    {
+        while (cabeca->prox->prox != NULL)
+        {
+            cabeca = cabeca->prox;
+        }
+        no* prox = cabeca->prox;
+        cabeca->prox = NULL;
+        return prox;
+    }
 }
 
 // Remove da lista e exclui todos os nós cujo campo
@@ -132,14 +153,12 @@ no *remove_final(no **p_cabeca)
 // um ponteiro para para o primeiro nó, chamado "p_cabeca".
 void remove_todos(no **p_cabeca, item dado)
 {
-    
 }
 
 // Faz o mesmo que a função descrita anteriormente, mas de uma forma
 // recursiva.
 void remove_todos_rec(no **p_cabeca, item dado)
 {
-    
 }
 
 // Troca os elementos da lista de lugar, sem alocar espaço adicional
@@ -148,29 +167,42 @@ void remove_todos_rec(no **p_cabeca, item dado)
 // nós que a lista dada, exceto que estes, agora, estão na ordem reversa.
 void inverte(no **p_cabeca)
 {
-    no* antigoUltimo = final(*p_cabeca);
-    no* antigoIncio = *p_cabeca;
-    if(*p_cabeca == NULL || (*p_cabeca)->prox==NULL){return;}
+    no *antigoUltimo = final(*p_cabeca);
+    no *antigoIncio = *p_cabeca;
+    if (*p_cabeca == NULL || (*p_cabeca)->prox == NULL)
+    {
+        return;
+    }
     *p_cabeca = antigoUltimo;
-    no* p = antigoIncio;
-    no* m = p->prox;
-    no* t;
+    no *p = antigoIncio;
+    no *m = p->prox;
+    no *t;
 
-    do{
+    do
+    {
         t = m->prox;
         m->prox = p;
         p = m;
         m = t;
-    }
-    while (t != NULL);
+    } while (t != NULL);
     antigoIncio->prox = NULL;
-    
+}
+
+no *inverteRecursivo(no *cabeca)
+{
+    if (cabeca == NULL || cabeca->prox == NULL)
+    {
+        return cabeca;
+    }
+    no *finalLista = inverteRecursivo(cabeca->prox);
+    cabeca->prox->prox = cabeca;
+    cabeca->prox = NULL;
+    return finalLista;
 }
 
 // Faz o mesmo que a função descrita anteriormente, mas de uma forma
 // recursiva.
 void inverte_rec(no **p_cabeca)
 {
-
-    // ... seu código aqui.
+    *p_cabeca = inverteRecursivo(*p_cabeca);
 }
