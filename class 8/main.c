@@ -182,14 +182,14 @@ int main()
       6. use apenas as funções imprime_lista() e inverte() do arquivo lista.c
 
       */
-            no *lista = le_lista();
-            inverte(&lista);
-            imprime_lista(lista);
-            exclui(final(lista));
-        }
-        else if (strcmp(operacao, "reverse_rec") == 0)
-        {
-            /* 
+			no *lista = le_lista();
+			inverte(&lista);
+			imprime_lista(lista);
+			exclui(final(lista));
+		}
+		else if (strcmp(operacao, "reverse_rec") == 0)
+		{
+			/* 
 
       EXERCÍCIO 4
 
@@ -199,14 +199,14 @@ int main()
       2. use apenas as funções imprime_lista() e inverte_rec() do arquivo lista.c
 
       */
-            no *lista = le_lista();
-            inverte_rec(&lista);
-            imprime_lista(lista);
-            exclui(final(lista));
-        }
-        else if (strcmp(operacao, "sorted_merge") == 0)
-        {
-            /* 
+			no *lista = le_lista();
+			inverte_rec(&lista);
+			imprime_lista(lista);
+			exclui(final(lista));
+		}
+		else if (strcmp(operacao, "sorted_merge") == 0)
+		{
+			/* 
 
       EXERCÍCIO 5
 
@@ -228,19 +228,60 @@ int main()
          compara() declarada em item.h
 
       */
-            no *a = le_lista();
-            no *b = le_lista();
-            
-            
-            
-            while (b != NULL)
-            {
-                no* temp = a;
-                while (temp!=NULL)
-                {
-                    if(compara(temp->dado, b->dado) >= 0 ){
-                        no* temp2 = temp->prox;
-                    }
+			no *a = le_lista();
+			no *b = le_lista();
+			if (a == NULL)
+			{
+				imprime_lista(b);
+			}
+			else if (b == NULL)
+			{
+				imprime_lista(a);
+			}
+			else
+			{
+				no *atual = a;
+				no *prev = NULL;
+				while (b != NULL)
+				{
+					while (atual != NULL)
+					{
+						// printf("(%d, %d) = %d\n", atual->dado, b->dado, compara(b->dado, atual->dado));
+						if (compara(b->dado, atual->dado) <= 0)
+						{
+							if (prev == NULL)
+							{
+								no *bProx = b->prox;
+								b->prox = a;
+								a = b;
+								prev = b;
+								b = bProx;
+							}
+							else
+							{
+								no *bProx = b->prox;
+								prev->prox = b;
+								b->prox = atual;
+								prev = b;
+								b = bProx;
+							}
+							break;
+						}
+						prev = atual;
+						atual = atual->prox;
+					}
+					if (atual == NULL)
+					{
+						prev->prox = b;
+						break;
+					}
+				}
+				imprime_lista(a);
+			}
+		}
+		else if (strcmp(operacao, "sorted_intersect") == 0)
+		{
+			/* 
 
                     temp = temp->prox;
                 }
@@ -274,12 +315,45 @@ int main()
          compara() declarada em item.h
 
       */
-
-            // seu código aqui ...
-        }
-        else if (strcmp(operacao, "split_in_half") == 0)
-        {
-            /* 
+			no *a = le_lista();
+			no *b = le_lista();
+			no *c = NULL;
+			// printf("oi");
+			if (a == NULL || b == NULL)
+			{
+				imprime_lista(c);
+			}
+			else
+			{
+				while (b != NULL)
+				{
+					while (compara(a->dado, b->dado) < 0 && a != NULL)
+					{
+						a = a->prox;
+					}
+					if (compara(a->dado, b->dado) == 0)
+					{
+						no *temp = c;
+						c = b;
+						b = b->prox;
+						c->prox = temp;
+						if (a == NULL)
+							break;
+						a = a->prox;
+					}
+					else
+					{
+						b = NULL;
+					}
+				}
+				inverte(&c);
+				imprime_lista(c);
+			}
+			// printf("asd");
+		}
+		else if (strcmp(operacao, "split_in_half") == 0)
+		{
+			/* 
 
       EXERCÍCIO 7
 
@@ -301,10 +375,31 @@ int main()
 
       */
 
-            no *c = le_lista();
-            int size = 0;
-            no *temp = c;
-            no *b;
+			no *c = le_lista();
+			int size = 0;
+			no *temp = c;
+			no *b;
+
+			if (temp != NULL)
+			{
+				for (size = 0; temp != NULL; (size++, temp = temp->prox))
+					; //calcula tamanho
+				temp = c;
+				for (int i = 0; i < (size / 2) - 1; (i++, temp = temp->prox))
+					; //pega nó do meio
+				b = temp->prox;
+				temp->prox = NULL;
+
+				imprime_lista(c);
+				imprime_lista(b);
+			}
+		}
+		else
+		{
+			// Nesse caso a operação lida não é válida
+			printf("INVALID OPERATION\n");
+		}
+	}
 
             if (temp != NULL)
             {

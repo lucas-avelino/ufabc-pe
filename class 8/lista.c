@@ -177,7 +177,6 @@ void inverte(no **p_cabeca)
     no *p = antigoIncio;
     no *m = p->prox;
     no *t;
-
     do
     {
         t = m->prox;
