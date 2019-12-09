@@ -5,10 +5,20 @@
     Struct definição
 */
 typedef struct sNode Node;
+typedef struct sOperation *Operation;
+typedef struct sOperation SOperation;
+
 struct sNode
 {
     int dado;
     Node *prox;
+};
+
+struct sOperation
+{
+    Node *num1;
+    Node *num2;
+    char operation;
 };
 
 /*
@@ -22,12 +32,55 @@ void imprimeLista(Node *cabeca);
 void inverte(Node **cabeca);
 int length(Node *cabeca);
 Node *getElement(Node *list, int index);
+void trimLeftNumber(Node **list);
 
 //Logica
 Node *soma(Node *num1, Node *num2);
 Node *multiplica(Node *num1, Node *num2);
 Node *multiplicaEscalar(Node *num1, int escalar);
 int length(Node *num1);
+Operation getOperacao();
+
+Operation getOperacao()
+{
+    char *buffer = NULL;
+    long size = 0;
+    Operation op = malloc(sizeof(SOperation));
+    op->operation = 0;
+    op->num1 = NULL;
+    op->num2 = NULL;
+    int line = getline(&buffer, &size, stdin);
+    if (line == -1)
+    {
+        return op;
+    }
+    for (long i = 0; i < size; i++)
+    {
+
+        if (buffer[i] == '*' || buffer[i] == '+') //se for operator
+        {
+            op->operation = buffer[i];
+        }
+        else if (buffer[i] >= 48 && buffer[i] <= 57) //Se for numero
+        {
+            if (op->operation != 0)
+            {
+                Node *no = cria((int)buffer[i] - 48);
+                pushFront(&op->num2, no);
+            }
+            else
+            {
+                Node *no = cria((int)buffer[i] - 48);
+                pushFront(&op->num1, no);
+            }
+        }
+        else
+        {
+            return op;
+        }
+    }
+    return op;
+}
 
 void main()
 {
@@ -38,32 +91,22 @@ void main()
 
     do
     {
-        char numero;
-        result = scanf("%c", &numero);
-        if (numero == '\n')
+        Operation op = getOperacao();
+        // imprimeLista(op->num1);
+        // imprimeLista(op->num2);
+        if (op->operation == 0)
+        {
             break;
-        if (numero == '*' || numero == '+')
-        {
-            operation = numero;
         }
-        else if (operation == '*' || operation == '+')
+        else if (op->operation == '*')
         {
-            Node *no = cria((int)numero - 48);
-            pushFront(&numero2, no);
+            imprimeLista(multiplica(op->num1, op->num2));
         }
-        else
+        else if (op->operation == '+')
         {
-            Node *no = cria((int)numero - 48);
-            pushFront(&numero1, no);
+            imprimeLista(soma(op->num1, op->num2));
         }
-        // printf("teste %d", result);
     } while (1);
-    // inverte(&numero1);
-    // inverte(&numero2);
-    imprimeLista(soma(numero1, numero2));
-    imprimeLista(multiplica(numero1, numero2));
-    // imprimeLista(numero1);
-    // imprimeLista(numero2);
 }
 
 Node *soma(Node *num1, Node *num2)
@@ -104,6 +147,7 @@ Node *soma(Node *num1, Node *num2)
     {
         pushFront(&resultado, cria(toAdd));
     }
+    trimLeftNumber(&resultado);
     return resultado;
 }
 
@@ -112,8 +156,7 @@ Node *multiplica(Node *num1, Node *num2)
     int tamanho = length(num2);
     Node **paraSomar = malloc(tamanho * sizeof(Node));
 
-    printf("117: %d\n", getElement(num2, 3)->dado);
-    for (int i = 0; i < tamanho && num2!=NULL; i++)
+    for (int i = 0; i < tamanho && num2 != NULL; i++)
     {
         paraSomar[i] = multiplicaEscalar(num1, getElement(num2, i)->dado);
         for (int j = 0; j < i; j++)
@@ -122,25 +165,36 @@ Node *multiplica(Node *num1, Node *num2)
         }
         num2 = num2->prox;
     }
-    Node 
+    Node *total = NULL;
     for (int i = 0; i < tamanho; i++)
     {
-       imprimeLista(paraSomar[i]);
+        inverte(&paraSomar[i]);
+        inverte(&total);
+        total = soma(total, paraSomar[i]);
     }
-    
-    return paraSomar[3];
+    //TODO: LIBERAR MEMORIA
+    trimLeftNumber(&total);
+    return total;
 }
 
 Node *multiplicaEscalar(Node *num1, int escalar)
 {
     int tamanho = length(num1);
     Node *no = NULL;
-    for (int i = 0; i < tamanho && num1!=NULL; i++)
+    int toAdd = 0;
+    for (int i = 0; i < tamanho && num1 != NULL; i++)
     {
-        pushFront(&no, cria(escalar * (getElement(num1, i)->dado)));
+        int mult = (escalar * (getElement(num1, i)->dado)) + toAdd;
+        int resto = mult % 10;
+        toAdd = (mult - resto) / 10;
+        pushFront(&no, cria(resto));
         num1 = num1->prox;
     }
-    
+    if (toAdd > 0)
+    {
+        pushFront(&no, cria(toAdd));
+    }
+
     return no;
 }
 
@@ -175,6 +229,10 @@ void pushFront(Node **head, Node *item)
 Node * final(Node **head)
 {
     Node *lista = *head;
+    if (lista == NULL)
+    {
+        return NULL;
+    }
     while (lista->prox != NULL)
     {
         lista = lista->prox;
@@ -185,7 +243,11 @@ Node * final(Node **head)
 void imprimeLista(Node *cabeca)
 {
     Node *tmp = cabeca;
-
+    if (cabeca == NULL)
+    {
+        printf("0\n");
+        return;
+    }
     while (tmp != NULL)
     {
         // printf("[%lx]:", tmp);
@@ -221,8 +283,9 @@ void inverte(Node **cabeca)
 int length(Node *cabeca)
 {
     int i;
-    if(cabeca == NULL) return 0;
-    for (i = 1; cabeca != NULL; cabeca = cabeca->prox)
+    if (cabeca == NULL)
+        return 0;
+    for (i = 0; cabeca != NULL; cabeca = cabeca->prox)
         i++;
     return i;
 }
@@ -230,10 +293,18 @@ int length(Node *cabeca)
 Node *getElement(Node *list, int index)
 {
     int i;
-    Node * e = list;
+    Node *e = list;
     for (i = 0; i < index && e != NULL; i++)
     {
         e = e->prox;
     }
     return list;
+}
+
+void trimLeftNumber(Node **list)
+{
+    while ((*list) != NULL && (*list)->dado == 0)
+    {
+        (*list) = (*list)->prox;
+    }
 }
