@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 // #include <string.h>
@@ -44,7 +45,7 @@ Operation getOperacao();
 Operation getOperacao()
 {
     char *buffer = NULL;
-    long size = 0;
+    size_t size = 0;
     Operation op = malloc(sizeof(SOperation));
     op->operation = 0;
     op->num1 = NULL;
@@ -82,7 +83,7 @@ Operation getOperacao()
     return op;
 }
 
-void main()
+int main()
 {
     int result = 0;
     char operation = 0;
@@ -107,6 +108,8 @@ void main()
             imprimeLista(soma(op->num1, op->num2));
         }
     } while (1);
+    
+    return 0;
 }
 
 Node *soma(Node *num1, Node *num2)
