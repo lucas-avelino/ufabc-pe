@@ -34,6 +34,7 @@ void inverte(Node **cabeca);
 int length(Node *cabeca);
 Node *getElement(Node *list, int index);
 void trimLeftNumber(Node **list);
+void exclui(Node* no);
 
 //Logica
 Node *soma(Node *num1, Node *num2);
@@ -41,6 +42,8 @@ Node *multiplica(Node *num1, Node *num2);
 Node *multiplicaEscalar(Node *num1, int escalar);
 int length(Node *num1);
 Operation getOperacao();
+
+Node * nosLivres = NULL;
 
 Operation getOperacao()
 {
@@ -85,27 +88,24 @@ Operation getOperacao()
 
 int main()
 {
-    int result = 0;
-    char operation = 0;
-    Node *numero1 = NULL;
-    Node *numero2 = NULL;
-
     do
     {
         Operation op = getOperacao();
-        // imprimeLista(op->num1);
-        // imprimeLista(op->num2);
         if (op->operation == 0)
         {
             break;
         }
         else if (op->operation == '*')
         {
-            imprimeLista(multiplica(op->num1, op->num2));
+            Node* result = multiplica(op->num1, op->num2);
+            imprimeLista(result);
+            if(result!=NULL) exclui(result);
         }
         else if (op->operation == '+')
         {
-            imprimeLista(soma(op->num1, op->num2));
+            Node* result = soma(op->num1, op->num2);
+            imprimeLista(result);
+            if(result!=NULL) exclui(result);
         }
     } while (1);
     
@@ -121,7 +121,6 @@ Node *soma(Node *num1, Node *num2)
         int soma = (num1->dado + num2->dado + toAdd);
         int resto = soma % 10;
         toAdd = (soma - resto) / 10;
-        // Node * resto = cria(resto);
         pushFront(&resultado, cria(resto));
         num1 = num1->prox;
         num2 = num2->prox;
@@ -163,9 +162,7 @@ Node *multiplica(Node *num1, Node *num2)
     {
         paraSomar[i] = multiplicaEscalar(num1, getElement(num2, i)->dado);
         for (int j = 0; j < i; j++)
-        {
             pushBack(&paraSomar[i], cria(0));
-        }
         num2 = num2->prox;
     }
     Node *total = NULL;
@@ -173,9 +170,10 @@ Node *multiplica(Node *num1, Node *num2)
     {
         inverte(&paraSomar[i]);
         inverte(&total);
+
         total = soma(total, paraSomar[i]);
+        if(paraSomar[i] != NULL) exclui(paraSomar[i]);
     }
-    //TODO: LIBERAR MEMORIA
     trimLeftNumber(&total);
     return total;
 }
@@ -204,9 +202,20 @@ Node *multiplicaEscalar(Node *num1, int escalar)
 //Biblioteca
 Node *cria(int numero)
 {
-    Node *no = (Node *)malloc(sizeof(Node));
+    if(nosLivres == NULL){
+        nosLivres = (Node *) malloc(sizeof(Node)*10000);
+        for (int i = 0; i < 10000; i++) (nosLivres + i)->prox = nosLivres + 1 + i ;
+    }
+    Node *no = nosLivres;
+    nosLivres = nosLivres->prox;
     no->dado = numero;
+    no->prox = NULL;
     return no;
+}
+
+void exclui(Node* no){
+    final(&no)->prox = nosLivres;
+    nosLivres = no;
 }
 
 void pushBack(Node **head, Node *item)
@@ -293,7 +302,7 @@ int length(Node *cabeca)
     return i;
 }
 
-Node *getElement(Node *list, int index)
+Node *getElement(Node *list, int index) //try delete
 {
     int i;
     Node *e = list;
